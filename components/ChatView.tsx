@@ -47,7 +47,7 @@ export default function ChatView() {
     setTyping(true)
 
     try {
-      const res = await fetch('http://192.168.1.153:11434/api/chat', {
+      const res = await fetch('https://watson.tail0243ff.ts.net/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
