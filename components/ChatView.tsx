@@ -47,13 +47,17 @@ export default function ChatView() {
     setTyping(true)
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('http://192.168.1.153:11434/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: historyRef.current }),
+        body: JSON.stringify({
+          model: 'phi3:mini',
+          messages: historyRef.current,
+          stream: false,
+        }),
       })
       const data = await res.json()
-      const reply = data.reply || 'No response.'
+      const reply = data.message?.content || 'No response.'
       historyRef.current.push({ role: 'assistant', content: reply })
       setMessages(prev => [...prev, { role: 'assistant', content: reply, time: getTime() }])
     } catch {
