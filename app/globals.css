@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2128;
+  --bg4: #21262d;
+  --border: rgba(255,255,255,0.08);
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --text3: #484f58;
+  --accent: #388bfd;
+  --accent2: #1f6feb;
+  --watson-bubble: #1c2128;
+  --user-bubble: #1a3a5c;
+  --mic-active: #da3633;
+  --success: #3fb950;
+  --warning: #d29922;
+}
+
+body.light {
+  --bg: #f0f0ec;
+  --bg2: #ffffff;
+  --bg3: #e4e4e0;
+  --bg4: #d8d8d4;
+  --border: rgba(0,0,0,0.08);
+  --text: #1a1a2e;
+  --text2: #555560;
+  --text3: #999;
+  --accent: #1a3a6c;
+  --accent2: #2a4a8c;
+  --watson-bubble: #ffffff;
+  --user-bubble: #1a3a6c;
+  --mic-active: #c0392b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+}
+
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-thumb { background: var(--border); }
