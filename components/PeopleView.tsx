@@ -48,6 +48,72 @@ const EMPTY_FORM = { name: '', email: '', phone: '', role: '', notes: '' }
 
 type View = 'list' | 'detail' | 'add' | 'edit'
 
+function SectionHeader({ title, action, onBack }: { title: string; action?: React.ReactNode; onBack: () => void }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px 10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text2)', fontSize: 16, padding: '0 4px 0 0', display: 'flex', alignItems: 'center' }}>‹</button>
+        <div style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text3)' }}>{title}</div>
+      </div>
+      {action}
+    </div>
+  )
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text3)', marginBottom: 4, paddingLeft: 2 }}>{label}</div>
+      {children}
+    </div>
+  )
+}
+
+function Input({ value, onChange, placeholder, type = 'text', setError }: { value: string; onChange: (v: string) => void; placeholder?: string; type?: string; setError: (v: string) => void }) {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={e => { onChange(e.target.value); setError('') }}
+      placeholder={placeholder}
+      style={{
+        width: '100%', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8,
+        padding: '9px 11px', fontSize: 13, color: 'var(--text)', outline: 'none', fontFamily: "'DM Mono', monospace",
+      }}
+    />
+  )
+}
+
+function Textarea({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
+  return (
+    <textarea
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={3}
+      style={{
+        width: '100%', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8,
+        padding: '9px 11px', fontSize: 13, color: 'var(--text)', outline: 'none', fontFamily: "'DM Mono', monospace",
+        resize: 'none', lineHeight: 1.5,
+      }}
+    />
+  )
+}
+
+function Avatar({ name, size = 36 }: { name: string; size?: number }) {
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: '50%', background: 'var(--accent2)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: size * 0.35, fontWeight: 600, color: 'white', flexShrink: 0,
+      border: '1px solid rgba(255,255,255,0.08)',
+    }}>
+      {initials}
+    </div>
+  )
+}
+
 interface Props {
   onBack: () => void
 }
@@ -122,80 +188,13 @@ export default function PeopleView({ onBack }: Props) {
     setSelected(null)
   }
 
-  // ── Shared helpers ──────────────────────────────────────────────────────
-
-  function SectionHeader({ title, action }: { title: string; action?: React.ReactNode }) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px 10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text2)', fontSize: 16, padding: '0 4px 0 0', display: 'flex', alignItems: 'center' }}>‹</button>
-          <div style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text3)' }}>{title}</div>
-        </div>
-        {action}
-      </div>
-    )
-  }
-
-  function Field({ label, children }: { label: string; children: React.ReactNode }) {
-    return (
-      <div style={{ marginBottom: 8 }}>
-        <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text3)', marginBottom: 4, paddingLeft: 2 }}>{label}</div>
-        {children}
-      </div>
-    )
-  }
-
-  function Input({ value, onChange, placeholder, type = 'text' }: { value: string; onChange: (v: string) => void; placeholder?: string; type?: string }) {
-    return (
-      <input
-        type={type}
-        value={value}
-        onChange={e => { onChange(e.target.value); setError('') }}
-        placeholder={placeholder}
-        style={{
-          width: '100%', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8,
-          padding: '9px 11px', fontSize: 13, color: 'var(--text)', outline: 'none', fontFamily: "'DM Mono', monospace",
-        }}
-      />
-    )
-  }
-
-  function Textarea({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
-    return (
-      <textarea
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder={placeholder}
-        rows={3}
-        style={{
-          width: '100%', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8,
-          padding: '9px 11px', fontSize: 13, color: 'var(--text)', outline: 'none', fontFamily: "'DM Mono', monospace",
-          resize: 'none', lineHeight: 1.5,
-        }}
-      />
-    )
-  }
-
-  function Avatar({ name, size = 36 }: { name: string; size?: number }) {
-    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    return (
-      <div style={{
-        width: size, height: size, borderRadius: '50%', background: 'var(--accent2)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: size * 0.35, fontWeight: 600, color: 'white', flexShrink: 0,
-        border: '1px solid rgba(255,255,255,0.08)',
-      }}>
-        {initials}
-      </div>
-    )
-  }
-
   // ── Views ───────────────────────────────────────────────────────────────
 
   if (view === 'list') return (
     <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
       <SectionHeader
         title={`People · ${people.length}`}
+        onBack={onBack}
         action={
           <button
             onClick={openAdd}
@@ -253,6 +252,7 @@ export default function PeopleView({ onBack }: Props) {
     <div style={{ flex: 1, overflowY: 'auto' }}>
       <SectionHeader
         title="Contact"
+        onBack={onBack}
         action={
           <div style={{ display: 'flex', gap: 6 }}>
             <button
@@ -315,19 +315,19 @@ export default function PeopleView({ onBack }: Props) {
     const isEdit = view === 'edit'
     return (
       <div style={{ flex: 1, overflowY: 'auto' }}>
-        <SectionHeader title={isEdit ? 'Edit contact' : 'New contact'} />
+        <SectionHeader title={isEdit ? 'Edit contact' : 'New contact'} onBack={onBack} />
         <div style={{ padding: '0 12px 24px', display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Field label="Name *">
-            <Input value={form.name} onChange={v => setForm(f => ({ ...f, name: v }))} placeholder="Full name" />
+            <Input value={form.name} onChange={v => setForm(f => ({ ...f, name: v }))} placeholder="Full name" setError={setError} />
           </Field>
           <Field label="Role / Relationship">
-            <Input value={form.role} onChange={v => setForm(f => ({ ...f, role: v }))} placeholder="e.g. Elder, Staff, Author" />
+            <Input value={form.role} onChange={v => setForm(f => ({ ...f, role: v }))} placeholder="e.g. Elder, Staff, Author" setError={setError} />
           </Field>
           <Field label="Email">
-            <Input value={form.email} onChange={v => setForm(f => ({ ...f, email: v }))} placeholder="email@example.com" type="email" />
+            <Input value={form.email} onChange={v => setForm(f => ({ ...f, email: v }))} placeholder="email@example.com" type="email" setError={setError} />
           </Field>
           <Field label="Phone">
-            <Input value={form.phone} onChange={v => setForm(f => ({ ...f, phone: v }))} placeholder="555-000-0000" type="tel" />
+            <Input value={form.phone} onChange={v => setForm(f => ({ ...f, phone: v }))} placeholder="555-000-0000" type="tel" setError={setError} />
           </Field>
           <Field label="Notes">
             <Textarea value={form.notes} onChange={v => setForm(f => ({ ...f, notes: v }))} placeholder="Relationship context, info…" />
