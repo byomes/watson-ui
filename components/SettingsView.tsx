@@ -58,7 +58,7 @@ export default function SettingsView({ isDark, onToggleTheme, onLogout }: Props)
 
         <GroupLabel>System</GroupLabel>
         <Row label="Watson server" value="Beelink · pending" />
-        <Row label="Model" value="llama3.1:8b" />
+        <Row label="Model" value="phi3:mini" />
         <Row label="Version" value="0.1.0" />
 
         <GroupLabel>Account</GroupLabel>

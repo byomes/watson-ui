@@ -9,28 +9,16 @@ export async function POST(req: NextRequest) {
 
   const { messages } = await req.json()
 
-  // When Beelink Watson API is live, swap this URL for:
-  // const watsonUrl = process.env.WATSON_API_URL + '/chat'
-  // For now, proxy to Anthropic directly
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('http://192.168.1.153:11434/api/chat', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY || '',
-      'anthropic-version': '2023-06-01',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: `You are Watson, Dr. Bill Yomes' AI-powered digital assistant. 
-Terse, efficient, direct. You handle research, scheduling, content, and logistics on his behalf. 
-Never pastor or speak theologically without permission. 
-Never guess — ask for clarity. Keep responses concise.`,
+      model: 'phi3:mini',
       messages,
+      stream: false,
     }),
   })
-
   const data = await res.json()
-  const reply = data.content?.[0]?.text || 'No response.'
+  const reply = data.message?.content || 'No response.'
   return NextResponse.json({ reply })
 }
