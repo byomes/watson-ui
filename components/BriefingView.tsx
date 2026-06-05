@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, CSSProperties } from 'react'
 
+const WATSON = process.env.NEXT_PUBLIC_WATSON_API_URL || ''
+
 interface Article {
   id: number
   title: string
@@ -45,7 +47,7 @@ export default function BriefingView() {
   function load() {
     setLoading(true)
     setOffline(false)
-    fetch('/api/watson/briefing')
+    fetch(`${WATSON}/briefing`)
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => { setArticles(Array.isArray(data) ? data : MOCK); setOffline(false) })
       .catch(() => { setArticles(MOCK); setOffline(true) })
@@ -56,7 +58,7 @@ export default function BriefingView() {
 
   function action(id: number, type: string) {
     setActioned(p => ({ ...p, [id]: type }))
-    fetch(`/api/watson/briefing/${id}/action`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: type }) }).catch(() => {})
+    fetch(`${WATSON}/briefing/${id}/action`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: type }) }).catch(() => {})
   }
 
   return (

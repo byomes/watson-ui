@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, CSSProperties } from 'react'
 
+const WATSON = process.env.NEXT_PUBLIC_WATSON_API_URL || ''
+
 interface Contact {
   id: number
   name: string
@@ -53,7 +55,7 @@ export default function ContactsView() {
   function load() {
     setLoading(true)
     setOffline(false)
-    fetch('/api/watson/people')
+    fetch(`${WATSON}/people`)
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => setContacts(Array.isArray(data) ? data : []))
       .catch(() => { setOffline(true); setContacts([]) })
@@ -66,7 +68,7 @@ export default function ContactsView() {
     if (!form.name.trim()) return
     setSaving(true)
     try {
-      const res = await fetch('/api/watson/people', {
+      const res = await fetch(`${WATSON}/people`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -84,7 +86,7 @@ export default function ContactsView() {
     if (!editForm) return
     setSaving(true)
     try {
-      const res = await fetch(`/api/watson/people/${id}`, {
+      const res = await fetch(`${WATSON}/people/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editForm),
@@ -101,7 +103,7 @@ export default function ContactsView() {
   async function deleteContact(id: number) {
     if (!confirm('Delete this contact?')) return
     setContacts(prev => prev.filter(c => c.id !== id))
-    fetch(`/api/watson/people/${id}`, { method: 'DELETE' }).catch(() => {})
+    fetch(`${WATSON}/people/${id}`, { method: 'DELETE' }).catch(() => {})
     if (expanded === id) setExpanded(null)
   }
 

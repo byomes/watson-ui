@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 
+const WATSON = process.env.NEXT_PUBLIC_WATSON_API_URL || ''
+
 type Status = 'reading' | 'queued' | 'finished'
 
 interface Book {
@@ -31,7 +33,7 @@ export default function ReadingView() {
   function load() {
     setLoading(true)
     setOffline(false)
-    fetch('/api/watson/reading_list')
+    fetch(`${WATSON}/reading_list`)
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => setBooks(Array.isArray(data) ? data : []))
       .catch(() => { setOffline(true); setBooks([]) })
@@ -42,7 +44,7 @@ export default function ReadingView() {
 
   function setStatus(id: number, status: Status) {
     setBooks(prev => prev.map(b => b.id === id ? { ...b, status } : b))
-    fetch(`/api/watson/reading_list/${id}`, {
+    fetch(`${WATSON}/reading_list/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),

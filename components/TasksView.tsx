@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, CSSProperties } from 'react'
 
+const WATSON = process.env.NEXT_PUBLIC_WATSON_API_URL || ''
+
 type Priority = 'high' | 'medium' | 'low'
 type Filter = 'all' | 'active' | 'done'
 type Status = 'active' | 'done'
@@ -50,7 +52,7 @@ export default function TasksView() {
   function load() {
     setLoading(true)
     setOffline(false)
-    fetch('/api/watson/tasks')
+    fetch(`${WATSON}/tasks`)
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => setTasks(Array.isArray(data) ? data : []))
       .catch(() => { setOffline(true); setTasks([]) })
@@ -63,7 +65,7 @@ export default function TasksView() {
     if (!newTitle.trim()) return
     setAdding(true)
     try {
-      const res = await fetch('/api/watson/tasks', {
+      const res = await fetch(`${WATSON}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: newTitle.trim(), due_date: newDue || undefined, priority: newPriority, status: 'active' }),
@@ -81,7 +83,7 @@ export default function TasksView() {
   async function toggleDone(task: Task) {
     const newStatus: Status = task.status === 'done' ? 'active' : 'done'
     setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t))
-    fetch(`/api/watson/tasks/${task.id}`, {
+    fetch(`${WATSON}/tasks/${task.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus }),
@@ -90,7 +92,7 @@ export default function TasksView() {
 
   async function deleteTask(id: number) {
     setTasks(prev => prev.filter(t => t.id !== id))
-    fetch(`/api/watson/tasks/${id}`, { method: 'DELETE' }).catch(() => {})
+    fetch(`${WATSON}/tasks/${id}`, { method: 'DELETE' }).catch(() => {})
   }
 
   const visible = tasks.filter(t =>
