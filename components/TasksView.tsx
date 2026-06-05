@@ -175,7 +175,7 @@ export default function TasksView() {
           </button>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, color: 'var(--text)', textDecoration: t.status === 'done' ? 'line-through' : 'none', color: t.status === 'done' ? 'var(--text3)' : 'var(--text)', marginBottom: 4, lineHeight: 1.4 }}>{t.title}</div>
+            <div style={{ fontSize: 13, textDecoration: t.status === 'done' ? 'line-through' : 'none', color: t.status === 'done' ? 'var(--text3)' : 'var(--text)', marginBottom: 4, lineHeight: 1.4 }}>{t.title}</div>
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', alignItems: 'center' }}>
               <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: PRIORITY_BG[t.priority], color: PRIORITY_COLOR[t.priority], letterSpacing: '0.04em', textTransform: 'uppercase' }}>{t.priority}</span>
               {t.due_date && <span style={{ fontSize: 10, color: 'var(--text3)' }}>{t.due_date}</span>}
